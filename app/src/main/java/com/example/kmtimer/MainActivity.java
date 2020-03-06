@@ -11,13 +11,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     TextView timerTextView;
+    Button startButton;
     SeekBar timeSeekBar;
     ImageView imageView;
+    MediaPlayer mediaPlayer;
     int totalTime = 1;
 
     public String convertTimeText(int time) {
@@ -29,7 +30,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void startTimer(View view) {
 
+        startButton.setEnabled(false);
+
         timeSeekBar.setEnabled(false);
+        MediaPlayer.create(this, R.raw.timer_start).start();
+        mediaPlayer = MediaPlayer.create(this, R.raw.timer_finish);
 
         new CountDownTimer(totalTime * 1000, 1000) {
 
@@ -40,7 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
             public void onFinish() {
                 imageView.setImageResource(R.drawable.timer_finish_image);
+
                 timeSeekBar.setEnabled(true);
+                startButton.setEnabled(true);
+
+                mediaPlayer.start();
             }
         }.start();
     }
@@ -50,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        startButton = findViewById(R.id.startButton);
         timerTextView = findViewById(R.id.timerTextView);
         timeSeekBar = findViewById(R.id.timeSeekBar);
         imageView = findViewById(R.id.imageView);
@@ -57,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
         timeSeekBar.setMax(3600);
         timeSeekBar.setProgress(totalTime);
         timerTextView.setText(convertTimeText(totalTime));
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.time_change);
+
 
         timeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -72,7 +85,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) { }
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mediaPlayer.start();
+            }
         });
 
     }
