@@ -15,34 +15,35 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     TextView timerTextView;
-    int totalTime = 60;
+    SeekBar timeSeekBar;
+    ImageView imageView;
+
+    int totalTime = 1;
 
     public String convertTimeText(int time) {
         String minutes, seconds;
-
         minutes = ((totalTime / 60 < 10)?"0":"") + (totalTime / 60);
         seconds = ((totalTime % 60 < 10)?"0":"") + (totalTime % 60);
-
         return minutes + ":" + seconds;
     }
 
     public void startTimer(View view) {
 
-        final ImageView imageView = findViewById(R.id.imageView);
         imageView.setImageResource(R.drawable.title_image);
+
+        timeSeekBar.setEnabled(false);
 
         new CountDownTimer(totalTime * 1000, 1000) {
 
             public void onTick(long millisLeft) {
-
-                timerTextView.setText(convertTimeText((int) millisLeft));
                 totalTime--;
+                timerTextView.setText(convertTimeText((int) millisLeft));
             }
 
             public void onFinish() {
-                Toast.makeText(getApplicationContext(), "Time is out!", Toast.LENGTH_SHORT).show();
-                timerTextView.setText("00:00");
                 imageView.setImageResource(R.drawable.timer_finish_image);
+                timeSeekBar.setEnabled(true);
+
             }
         }.start();
     }
@@ -53,11 +54,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         timerTextView = findViewById(R.id.timerTextView);
-
-        SeekBar timeSeekBar = findViewById(R.id.timeSeekBar);
+        timeSeekBar = findViewById(R.id.timeSeekBar);
+        imageView = findViewById(R.id.imageView);
 
         timeSeekBar.setMax(3600);
-        timeSeekBar.setProgress((int) totalTime);
+        timeSeekBar.setProgress(totalTime);
         timerTextView.setText(convertTimeText(totalTime));
 
         timeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -69,7 +70,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                imageView.setImageResource(R.drawable.title_image);
+            }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) { }
