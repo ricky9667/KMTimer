@@ -34,16 +34,17 @@ public class MainActivity extends AppCompatActivity {
 
         timeSeekBar.setEnabled(false);
         MediaPlayer.create(this, R.raw.timer_start).start();
-        mediaPlayer = MediaPlayer.create(this, R.raw.timer_finish);
+        mediaPlayer = MediaPlayer.create(this, R.raw.timer_stop);
 
         new CountDownTimer(totalTime * 1000, 1000) {
 
             public void onTick(long millisLeft) {
-                totalTime--;
                 timerTextView.setText(convertTimeText((int) millisLeft));
+                totalTime--;
             }
 
             public void onFinish() {
+                timerTextView.setText("00:00");
                 imageView.setImageResource(R.drawable.timer_finish_image);
 
                 timeSeekBar.setEnabled(true);
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         timeSeekBar = findViewById(R.id.timeSeekBar);
         imageView = findViewById(R.id.imageView);
 
-        timeSeekBar.setMax(3600);
+        timeSeekBar.setMax(1200);
         timeSeekBar.setProgress(totalTime);
         timerTextView.setText(convertTimeText(totalTime));
 
