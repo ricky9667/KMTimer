@@ -2,6 +2,7 @@ package com.example.kmtimer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -17,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
     TextView timerTextView;
     SeekBar timeSeekBar;
     ImageView imageView;
-
     int totalTime = 1;
 
     public String convertTimeText(int time) {
@@ -28,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startTimer(View view) {
-
-        imageView.setImageResource(R.drawable.title_image);
 
         timeSeekBar.setEnabled(false);
 
@@ -43,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 imageView.setImageResource(R.drawable.timer_finish_image);
                 timeSeekBar.setEnabled(true);
-
             }
         }.start();
     }
